@@ -1,0 +1,48 @@
+tables and relationships:
+
+Suppliers Table:
+
+SupplierID (Primary Key)
+SupplierName
+SupplierAddress
+ContactNumber
+Email
+...
+
+Supplies Table:
+
+SupplyID (Primary Key)
+SupplyName
+SupplierID (Foreign Key referencing Suppliers.SupplierID)
+Quantity
+BuyingPrice
+SellingPrice
+...
+
+Customers Table:
+
+CustomerID (Primary Key)
+CustomerName
+CustomerAddress
+ContactNumber
+Email
+...
+
+Orders Table:
+
+OrderID (Primary Key)
+CustomerID (Foreign Key referencing Customers.CustomerID)
+SupplyID
+OrderDate
+Distance
+TransportCharges
+TotalAmount
+...
+
+Profitability Table:
+SupplyID (Foreign Key referencing Supplies.SupplyID)
+SupplyName
+Profit
+ProfitPercentage
+To calculate the most profitable supplies, you can query the Profitability Table and sort 
+the supplies based on profit or profit percentage.
