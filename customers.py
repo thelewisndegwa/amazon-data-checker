@@ -23,7 +23,7 @@ def seed_customers_table():
         customer_name = fake.name()
         customer_address = fake.address()
         contact_number = fake.phone_number()
-        email = fake.email()
+        email = f"{customer_name}@{fake.domain_name()}"
         customers_data.append((None, customer_name, customer_address, contact_number, email))
     c.executemany('INSERT INTO customers VALUES (?, ?, ?, ?, ?)', customers_data)
     conn.commit()

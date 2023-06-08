@@ -46,3 +46,14 @@ Profit
 ProfitPercentage
 To calculate the most profitable supplies, you can query the Profitability Table and sort 
 the supplies based on profit or profit percentage.
+
+
+
+Customer:
+Can buy supplies (delete)
+Make an order 
+
+Supplier:
+Can add supplies (update)
+See supplies 
+See profit

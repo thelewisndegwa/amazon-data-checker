@@ -23,7 +23,7 @@ def seed_suppliers_table():
         supplier_name = fake.name()
         supplier_address = fake.address()
         contact_number = fake.phone_number()
-        email = fake.email()
+        email = f"{supplier_name}@{fake.domain_name()}"
         suppliers_data.append((None, supplier_name, supplier_address, contact_number, email))
     c.executemany('INSERT INTO suppliers VALUES (?, ?, ?, ?, ?)', suppliers_data)
     conn.commit()
