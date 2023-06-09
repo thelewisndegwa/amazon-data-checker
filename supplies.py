@@ -7,20 +7,18 @@ connection = engine.connect()
 metadata = db.MetaData()
 
 class Supplies:
+    supplies_table = db.Table('supplies', metadata,
+        db.Column('SupplyID', db.INTEGER, primary_key=True),
+        db.Column('SupplyName', db.TEXT),
+        db.Column('SupplierID', db.INTEGER),
+        db.Column('Quantity', db.INTEGER),
+        db.Column('BuyingPrice', db.REAL),
+        db.Column('SellingPrice', db.REAL),
+        db.ForeignKeyConstraint(['SupplierID'], ['suppliers.SupplierID'])
+    )
+
     def create_supplies_table():
-        conn = sqlite3.connect('amazon.db')
-        c = conn.cursor()
-        c.execute('''CREATE TABLE IF NOT EXISTS supplies (
-                        SupplyID INTEGER PRIMARY KEY,
-                        SupplyName TEXT,
-                        SupplierID INTEGER,
-                        Quantity INTEGER,
-                        BuyingPrice REAL,
-                        SellingPrice REAL,
-                        FOREIGN KEY (SupplierID) REFERENCES suppliers (SupplierID)
-                    )''')
-        conn.commit()
-        conn.close()
+        metadata.create_all(engine)
 
     def seed_supplies_table():
         conn = sqlite3.connect('amazon.db')
@@ -28,7 +26,6 @@ class Supplies:
         fake = Faker()
         supplies_data = []
 
-        # Retrieve existing supplier IDs from the suppliers table
         c.execute("SELECT SupplierID FROM suppliers")
         supplier_ids = [row[0] for row in c.fetchall()]
 
@@ -49,7 +46,7 @@ class Supplies:
         Quantity = int(input("Quantity: "))
         Buying_Price = int(input("Buying Price: "))
         Selling_Price = int(input("Selling Price: "))
-        insertion_query = db.insert(metadata.tables['supplies']).values(
+        insertion_query = db.insert(Supplies.supplies_table).values(
             SupplyName=SupplyName,
             Quantity=Quantity,
             BuyingPrice=Buying_Price,
@@ -57,6 +54,21 @@ class Supplies:
         )
         connection.execute(insertion_query)
 
+    def check_supplier_supplies(supplier_id):
+        query = db.select(Supplies.supplies_table).where(Supplies.supplies_table.columns.SupplierID == supplier_id)
+        result = connection.execute(query)
+
+        if result.rowcount == 0:
+            print("No supplies found for the supplier.")
+        else:
+            print("Supplies for the supplier:")
+            for row in result:
+                print("Supply ID:", row[0])
+                print("Supply Name:", row[1])
+                print("Quantity:", row[3])
+                print("Buying Price:", row[4])
+                print("Selling Price:", row[5])
+                 
+
 Supplies.create_supplies_table()
 Supplies.seed_supplies_table()
-

@@ -27,5 +27,8 @@ while choice != 4:
          supplierChoice = int(input("Select a choice >>>"))
          if supplierChoice == 1:
               Supplies.add_supplies()
+          
          elif supplierChoice == 2:
-              Profit.display_profits()
+              Profit.display_profits(id)
+         elif supplierChoice == 3:
+             Supplies.check_supplier_supplies(id)
