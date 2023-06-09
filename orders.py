@@ -60,7 +60,8 @@ class Orders:
 
         # Print available supplies
         print("Available Supplies:")
-        c.execute("SELECT * FROM supplies")
+        c.execute("SELECT SupplyID, SupplyName, SellingPrice, Quantity FROM supplies")
+
         supplies = c.fetchall()
         for supply in supplies:
             print(supply)
