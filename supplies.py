@@ -8,14 +8,13 @@ metadata = db.MetaData()
 
 class Supplies:
     supplies_table = db.Table('supplies', metadata,
-        db.Column('SupplyID', db.INTEGER, primary_key=True),
-        db.Column('SupplyName', db.TEXT),
-        db.Column('SupplierID', db.INTEGER),
-        db.Column('Quantity', db.INTEGER),
-        db.Column('BuyingPrice', db.REAL),
-        db.Column('SellingPrice', db.REAL),
-        db.ForeignKeyConstraint(['SupplierID'], ['suppliers.SupplierID'])
-    )
+    db.Column('SupplyID', db.INTEGER, primary_key=True),
+    db.Column('SupplyName', db.TEXT),
+    db.Column('SupplierID', db.INTEGER, db.ForeignKey('suppliers.SupplierID')),
+    db.Column('Quantity', db.INTEGER),
+    db.Column('BuyingPrice', db.REAL),
+    db.Column('SellingPrice', db.REAL),
+)
 
     def create_supplies_table():
         metadata.create_all(engine)
@@ -46,8 +45,22 @@ class Supplies:
         Quantity = int(input("Quantity: "))
         Buying_Price = int(input("Buying Price: "))
         Selling_Price = int(input("Selling Price: "))
+
+        # Fetch the available supplier IDs
+        query = db.select([db.column('SupplierID')])
+
+        result = connection.execute(query)
+        supplier_ids = [row[0] for row in result]
+
+        # Prompt for a valid SupplierID
+        SupplierID = None
+        while SupplierID not in supplier_ids:
+            SupplierID = int(input("Supplier ID: "))
+
+        # Insert the supply with the provided SupplierID
         insertion_query = db.insert(Supplies.supplies_table).values(
             SupplyName=SupplyName,
+            SupplierID=SupplierID,
             Quantity=Quantity,
             BuyingPrice=Buying_Price,
             SellingPrice=Selling_Price
